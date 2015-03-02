@@ -30,6 +30,10 @@ public class MainWindow extends JFrame implements ActionListener, KeyListener {
 		mainPanel.add(warrior1);
 		mainPanel.add(finishPanel);
 		
+		for(int i = 0; i<MapLoader.walls.size(); i++) {
+			addWall(MapLoader.walls.get(i));
+		}
+		
 		this.setTitle("Labyrinth Warrior");
 		this.add(mainPanel);
 		
@@ -38,11 +42,7 @@ public class MainWindow extends JFrame implements ActionListener, KeyListener {
 	
 	
 	
-	public void makeWall(int height, int width, int x, int y) {//Coordinates starts form the top left; size is measured in blocks
-		Wall wall = new Wall();
-		wall.setSize(width*blockSize, height*blockSize);
-		wall.setLocation(x*blockSize+5, y*blockSize+5);
-		wall.setBackground(Color.black);
+	public void addWall(Wall wall) {
 		mainPanel.add(wall);
 		this.repaint();
 		this.setTitle("wall spawned!");
@@ -57,7 +57,7 @@ public class MainWindow extends JFrame implements ActionListener, KeyListener {
 	private boolean leftPassable() {
 		return !((mainPanel.getComponentAt(warrior1.getX()-1, warrior1.getY()).getBackground() == Color.black)||
 				(mainPanel.getComponentAt(warrior1.getX()-1, warrior1.getY()+blockSize).getBackground() == Color.black)||
-				(mainPanel.getComponentAt(warrior1.getX()-1, warrior1.getY()+blockSize*2).getBackground() == Color.black));
+				(mainPanel.getComponentAt(warrior1.getX()-1, warrior1.getY()+blockSize*2-1).getBackground() == Color.black));
 	}
 	
 	private boolean downPassable() {
@@ -82,19 +82,19 @@ public class MainWindow extends JFrame implements ActionListener, KeyListener {
 	public void keyPressed(KeyEvent arg0) {
 		int x, y;
 		int wHeight, wWidth;
-		char key = arg0.getKeyChar();
+		int key = arg0.getKeyCode();
 		x = warrior1.getX();
 		y = warrior1.getY();
 		wWidth = ((this.getWidth()/5)*5-30);
 		wHeight = ((this.getHeight()/5)*5-55);
 		
-		if(key == 'w' && x>=5 && y>5 && x<=wWidth && y<=wHeight && upPassable())
+		if(key == 87 && x>=5 && y>5 && x<=wWidth && y<=wHeight && upPassable())
 			warrior1.moveEntity(Warrior.Direction.up);
-		else if(key == 'a' && x>5 && y>=5 && x<=wWidth && y<=wHeight && leftPassable())
+		else if(key == 65 && x>5 && y>=5 && x<=wWidth && y<=wHeight && leftPassable())
 			warrior1.moveEntity(Warrior.Direction.left);
-		else if(key == 's' && x>=5 && y>=5 && x<=wWidth && y<wHeight && downPassable())
+		else if(key == 83 && x>=5 && y>=5 && x<=wWidth && y<wHeight && downPassable())
 			warrior1.moveEntity(Warrior.Direction.down);
-		else if(key == 'd' && x>=5 && y>=5 && x<wWidth && y<=wHeight && rightPassable())
+		else if(key == 68 && x>=5 && y>=5 && x<wWidth && y<=wHeight && rightPassable())
 			warrior1.moveEntity(Warrior.Direction.right);
 		
 		
@@ -103,8 +103,11 @@ public class MainWindow extends JFrame implements ActionListener, KeyListener {
 			this.setTitle("won!!");
 		}
 		
-		if(key == 'p') {
-			makeWall(5, 1, 4, 7);
+		if(key == 80) {
+			addWall(new Wall(5, 1, 4, 7));
+		}
+		if(key == 81) {
+			
 		}
 	}
 
