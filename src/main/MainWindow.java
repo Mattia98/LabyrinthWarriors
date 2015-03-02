@@ -14,7 +14,7 @@ public class MainWindow extends JFrame implements ActionListener, KeyListener {
 	JPanel mainPanel;
 	Warrior warrior1;
 	JPanel finishPanel;
-	public int blockSize = 20;
+	public static int blockSize = 20;
 	
 	public MainWindow() {
 		mainPanel = new JPanel();
@@ -49,43 +49,27 @@ public class MainWindow extends JFrame implements ActionListener, KeyListener {
 	}
 	
 	private boolean rightPassable() {
-		Component elementNextToWarrior = mainPanel.getComponentAt(warrior1.getX()+blockSize, warrior1.getY()+blockSize);
-		if(elementNextToWarrior.getBackground() == Color.black)
-			return false;
-		else
-			elementNextToWarrior = mainPanel.getComponentAt(warrior1.getX()+blockSize, warrior1.getY()+blockSize+blockSize-1);
-		if(elementNextToWarrior.getBackground() == Color.black)
-			return false;
-		
-		return true;
+		return !((mainPanel.getComponentAt(warrior1.getX()+blockSize*2, warrior1.getY()).getBackground() == Color.black)||
+				(mainPanel.getComponentAt(warrior1.getX()+blockSize*2, warrior1.getY()+blockSize).getBackground() == Color.black)||
+				(mainPanel.getComponentAt(warrior1.getX()+blockSize*2, warrior1.getY()+blockSize*2-1).getBackground() == Color.black));
 	}
 	
 	private boolean leftPassable() {
-		Component elementNextToWarrior = mainPanel.getComponentAt(warrior1.getX()-1, warrior1.getY()+blockSize);
-		if(elementNextToWarrior.getBackground() == Color.black)
-			return false;
-		else
-			elementNextToWarrior = mainPanel.getComponentAt(warrior1.getX()-1, warrior1.getY()+blockSize+blockSize-1);
-		if(elementNextToWarrior.getBackground() == Color.black)
-			return false;
-		
-		return true;
+		return !((mainPanel.getComponentAt(warrior1.getX()-1, warrior1.getY()).getBackground() == Color.black)||
+				(mainPanel.getComponentAt(warrior1.getX()-1, warrior1.getY()+blockSize).getBackground() == Color.black)||
+				(mainPanel.getComponentAt(warrior1.getX()-1, warrior1.getY()+blockSize*2).getBackground() == Color.black));
 	}
 	
 	private boolean downPassable() {
-		Component elementNextToWarrior = mainPanel.getComponentAt(warrior1.getX(), warrior1.getY()+40);
-		if(elementNextToWarrior.getBackground() == Color.black)
-			return false;
-		
-		return true;
+		return !((mainPanel.getComponentAt(warrior1.getX(), warrior1.getY()+blockSize*2).getBackground() == Color.black)||
+				(mainPanel.getComponentAt(warrior1.getX()+blockSize, warrior1.getY()+blockSize*2).getBackground() == Color.black)||
+				(mainPanel.getComponentAt(warrior1.getX()+blockSize*2-1, warrior1.getY()+blockSize*2).getBackground() == Color.black));
 	}
 	
 	private boolean upPassable() {
-		Component elementNextToWarrior = mainPanel.getComponentAt(warrior1.getX(), warrior1.getY()-1);
-		if(elementNextToWarrior.getBackground() == Color.black)
-			return false;
-		
-		return true;
+		return !((mainPanel.getComponentAt(warrior1.getX(), warrior1.getY()-1).getBackground() == Color.black)||
+				(mainPanel.getComponentAt(warrior1.getX()+blockSize, warrior1.getY()-1).getBackground() == Color.black)||
+				(mainPanel.getComponentAt(warrior1.getX()+blockSize*2-1, warrior1.getY()-1).getBackground() == Color.black));
 	}
 	
 	@Override
@@ -105,15 +89,14 @@ public class MainWindow extends JFrame implements ActionListener, KeyListener {
 		wHeight = ((this.getHeight()/5)*5-55);
 		
 		if(key == 'w' && x>=5 && y>5 && x<=wWidth && y<=wHeight && upPassable())
-				y-=5;
+			warrior1.moveEntity(Warrior.Direction.up);
 		else if(key == 'a' && x>5 && y>=5 && x<=wWidth && y<=wHeight && leftPassable())
-				x-=5;
+			warrior1.moveEntity(Warrior.Direction.left);
 		else if(key == 's' && x>=5 && y>=5 && x<=wWidth && y<wHeight && downPassable())
-				y+=5;
+			warrior1.moveEntity(Warrior.Direction.down);
 		else if(key == 'd' && x>=5 && y>=5 && x<wWidth && y<=wHeight && rightPassable())
-				x+=5;
+			warrior1.moveEntity(Warrior.Direction.right);
 		
-		warrior1.setLocation(x, y);
 		
 		this.setTitle("X="+x+" Y="+y+" Wi="+this.getWidth()+" He="+this.getHeight());
 		if(x == 400 && y == 400) {

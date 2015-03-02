@@ -1,26 +1,18 @@
 package main;
 
-import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
-public class Warrior extends JPanel {
+public class Warrior extends Entity {
 	
 	public Warrior() {
-		this.setSize(20, 40);
-		this.setLocation(10, 10);
-		this.setBackground(Color.green);
-	}
-	
-	
-	//Moves the warrior 5 px up.
-	public Boolean moveUp() {
-		int x, y;
-		x = this.getX();
-		y = this.getY();
-		y-=5;
-		this.setLocation(x, y);
-		return true;
+		this.setSize(MainWindow.blockSize*2, MainWindow.blockSize*2);
+		loadStandardImage("resources/warriorstill.png");
 	}
 	
 	
